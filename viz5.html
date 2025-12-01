@@ -2,21 +2,18 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Viz 2 - Boston 311 Temporal Analysis</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/d3_viz2_style.css">
+  <title>Viz 5 - Boston 311 Temporal Analysis</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/d3_viz2_style.css">
 </head>
-
 <body>
   <nav>
-    <a href="../index.html">Home</a>
-    <a href="../data.html">Data</a>
-    <a href="../visualizations.html">Visualizations</a>
-    <a href="../conclusion.html">Conclusion</a>
+    <a href="index.html">Home</a>
+    <a href="data.html">Data</a>
+    <a href="visualizations.html">Visualizations</a>
+    <a href="conclusion.html">Conclusion</a>
   </nav>
-
-  <h1>Visualization 2: Temporal Analysis with Time Slider</h1>
-
+  <h1>Visualization 5: Temporal Analysis with Time Slider</h1>
   <div class="container">
     <p class="subtitle">Watch how complaint patterns shift across semesters around NEU Campus</p>
     
@@ -42,18 +39,15 @@
       <svg id="timeline-chart"></svg>
     </div>
   </div>
-
   <h2>Takeaway</h2>
   <p>
     This temporal visualization shows how Boston 311 service requests around NEU campus evolve month-by-month throughout the year. The time slider allows you to observe seasonal patterns and identify how complaint volumes and types change between Fall, Spring, and Summer semesters. The timeline bar chart provides an overview of monthly complaint volumes, making it easy to spot peaks and valleys in service requests.
   </p>
-
   <h2>Interaction</h2>
   <p>
     Drag the time slider to view any month from January to December. Click the "Play Animation" button to automatically cycle through all months and watch patterns emerge. Click any bar in the timeline chart to jump directly to that month. Hover over complaint circles to see detailed information. The statistics panel updates in real-time to show complaint counts, top categories, average response times, and affected neighborhoods for the selected time period.
   </p>
-
-  <script src='https://d3js.org/d3.v7.min.js'></script>
-  <script src='../js/d3_viz2.js'></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="js/d3_viz2.js"></script>
 </body>
 </html>
