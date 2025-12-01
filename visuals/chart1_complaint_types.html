@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.8.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-3d395388309c41acb320cdda8099663b"}, "mark": {"type": "bar"}, "encoding": {"color": {"field": "Count", "legend": null, "scale": {"scheme": "blues"}, "type": "quantitative"}, "tooltip": [{"field": "Complaint Type", "title": "Complaint Type", "type": "nominal"}, {"field": "Count", "format": ",", "title": "Total Requests", "type": "quantitative"}], "x": {"axis": {"grid": true, "labelFontSize": 11, "titleFontSize": 13}, "field": "Count", "title": "Number of Requests", "type": "quantitative"}, "y": {"axis": {"labelFontSize": 11, "labelLimit": 300, "titleFontSize": 13}, "field": "Complaint Type", "sort": "-x", "title": "Complaint Type", "type": "nominal"}}, "height": 400, "title": {"text": "Top 10 Most Common 311 Service Request Types", "subtitle": "Near Northeastern University Campus Area", "fontSize": 16, "anchor": "start"}, "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json", "datasets": {"data-3d395388309c41acb320cdda8099663b": [{"Complaint Type": "Parking Enforcement", "Count": 63214}, {"Complaint Type": "Requests for Street Cleaning", "Count": 21354}, {"Complaint Type": "Improper Storage of Trash (Barrels)", "Count": 20421}, {"Complaint Type": "CE Collection", "Count": 17881}, {"Complaint Type": "Needle Pickup", "Count": 10723}, {"Complaint Type": "Request for Pothole Repair", "Count": 9077}, {"Complaint Type": "Poor Conditions of Property", "Count": 8586}, {"Complaint Type": "Pick up Dead Animal", "Count": 8403}, {"Complaint Type": "Sidewalk Repair (Make Safe)", "Count": 5355}, {"Complaint Type": "Sign Repair", "Count": 5350}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
