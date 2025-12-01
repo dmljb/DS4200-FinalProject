@@ -2,21 +2,18 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Viz 1 - Boston 311 Complaints Heatmap</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/d3_viz1_style.css">
+  <title>Viz 4 - Boston 311 Complaints Heatmap</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/d3_viz1_style.css">
 </head>
-
 <body>
   <nav>
-    <a href="../index.html">Home</a>
-    <a href="../data.html">Data</a>
-    <a href="../visualizations.html">Visualizations</a>
-    <a href="../conclusion.html">Conclusion</a>
+    <a href="index.html">Home</a>
+    <a href="data.html">Data</a>
+    <a href="visualizations.html">Visualizations</a>
+    <a href="conclusion.html">Conclusion</a>
   </nav>
-
-  <h1>Visualization 1: Interactive Neighborhood Heatmap</h1>
-
+  <h1>Visualization 4: Interactive Neighborhood Heatmap</h1>
   <div class="container">
     <p class="subtitle">NEU Campus Area | Interactive Visualization by Category</p>
     
@@ -43,18 +40,15 @@
       <div class="legend-items" id="legend"></div>
     </div>
   </div>
-
   <h2>Takeaway</h2>
   <p>
     This interactive heatmap visualizes Boston 311 service requests around the Northeastern University campus area. Each circle represents a complaint, color-coded by category (Parking, Street/Sidewalk, Trash, etc.). The visualization reveals spatial patterns of complaints and allows filtering by both category and semester to identify how issues vary throughout the academic year.
   </p>
-
   <h2>Interaction</h2>
   <p>
     Click category buttons to show/hide specific complaint types. Toggle semester filters (Fall, Spring, Summer) to compare patterns across the academic year. Hover over any circle to see detailed information including complaint type, neighborhood, date, response time, and distance from campus. The live statistics update automatically based on your selected filters.
   </p>
-
-  <script src='https://d3js.org/d3.v7.min.js'></script>
-  <script src='../js/d3_viz1.js'></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="js/d3_viz1.js"></script>
 </body>
 </html>
