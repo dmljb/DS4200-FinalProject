@@ -95,7 +95,7 @@ d3.csv("../sample_data.csv").then(data => {
 
     // Draw timeline chart
     drawTimelineChart();
-
+    
     // Draw initial neighborhood zones
     drawNeighborhoodZones();
 
@@ -190,18 +190,18 @@ function drawNeighborhoodZones() {
         }),
         d => d.neighborhood
     );
-
+    
     const xExtent = d3.extent(allData, d => d.longitude);
     const yExtent = d3.extent(allData, d => d.latitude);
-
+    
     const xScale = d3.scaleLinear()
         .domain(xExtent)
         .range([0, width - margin.left - margin.right]);
-
+    
     const yScale = d3.scaleLinear()
         .domain(yExtent)
         .range([height - margin.top - margin.bottom, 0]);
-
+    
     // Convert centers to array for Voronoi
     const centers = Array.from(neighborhoodCenters.values()).map(d => ({
         x: xScale(d.lon),
@@ -209,11 +209,11 @@ function drawNeighborhoodZones() {
         name: d.name,
         count: d.count
     }));
-
+    
     // Create Voronoi diagram
     const delaunay = d3.Delaunay.from(centers, d => d.x, d => d.y);
     const voronoi = delaunay.voronoi([0, 0, width - margin.left - margin.right, height - margin.top - margin.bottom]);
-
+    
     // Draw neighborhood zones
     centers.forEach((d, i) => {
         neighborhoodGroup.append("path")
@@ -224,7 +224,7 @@ function drawNeighborhoodZones() {
             .style("stroke-width", "1.5px")
             .style("opacity", 0.4);
     });
-
+    
     // Add neighborhood labels
     centers.forEach(d => {
         neighborhoodGroup.append("text")
@@ -301,7 +301,7 @@ function renderMap(data, semester) {
 function drawTimelineChart() {
     const chartWidth = 1340;
     const chartHeight = 200;
-    const chartMargin = {top: 20, right: 30, bottom: 40, left: 50};
+    const chartMargin = {top: 20, right: 50, bottom: 50, left: 60};
 
     chartSvg
         .attr("width", chartWidth)
@@ -317,11 +317,11 @@ function drawTimelineChart() {
         name: monthNames[i]
     }));
 
-    // Scales
+    // Scales - make sure we have room for all 12 months
     const x = d3.scaleBand()
-        .domain(monthlyCounts.map(d => d.month))
+        .domain(d3.range(0, 12))  // Explicitly 0-11 for all 12 months
         .range([0, chartWidth - chartMargin.left - chartMargin.right])
-        .padding(0.1);
+        .padding(0.15);  // Slightly less padding for better fit
 
     const y = d3.scaleLinear()
         .domain([0, d3.max(monthlyCounts, d => d.count)])
@@ -338,21 +338,37 @@ function drawTimelineChart() {
         .attr("y", d => y(d.count))
         .attr("width", x.bandwidth())
         .attr("height", d => chartHeight - chartMargin.top - chartMargin.bottom - y(d.count))
+        .style("cursor", "pointer")
         .on("click", (event, d) => {
             currentMonth = d.month;
             d3.select("#time-slider").property("value", currentMonth);
             updateVisualization();
         });
 
-    // Axes
+    // X Axis - show all month names
     chartG.append("g")
         .attr("class", "axis")
         .attr("transform", `translate(0,${chartHeight - chartMargin.top - chartMargin.bottom})`)
-        .call(d3.axisBottom(x).tickFormat(i => monthNames[i].substring(0, 3)));
+        .call(d3.axisBottom(x).tickFormat(i => monthNames[i].substring(0, 3)))
+        .selectAll("text")
+        .style("text-anchor", "middle")
+        .style("font-size", "10px");
 
+    // Y Axis
     chartG.append("g")
         .attr("class", "axis")
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y).ticks(5));
+    
+    // Y Axis Label
+    chartG.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - chartMargin.left + 10)
+        .attr("x", 0 - (chartHeight - chartMargin.top - chartMargin.bottom) / 2)
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .style("font-size", "11px")
+        .style("fill", "#666")
+        .text("Number of Complaints");
 }
 
 function updateTimelineChart(activeMonth) {
