@@ -26,6 +26,21 @@ const categoryColors = {
     'Other': '#7f8c8d'
 };
 
+// Neighborhood colors (subtle pastels)
+const neighborhoodColors = {
+    'Roxbury': '#ffebee',
+    'South End': '#e8f5e9',
+    'Dorchester': '#e3f2fd',
+    'Mission Hill': '#fff3e0',
+    'Back Bay': '#f3e5f5',
+    'Jamaica Plain': '#fce4ec',
+    'Fenway / Kenmore / Audubon Circle / Longwood': '#e0f2f1',
+    'Boston': '#fff9c4',
+    'Downtown / Financial District': '#f1f8e9',
+    'Beacon Hill': '#ede7f6',
+    'South Boston / South Boston Waterfront': '#e1f5fe'
+};
+
 // State
 let allData = [];
 let currentMonth = 0;
@@ -36,6 +51,11 @@ let monthlyData = [];
 const svg = d3.select("#map")
     .attr("width", width)
     .attr("height", height);
+
+// Add background group for neighborhoods (behind everything)
+const neighborhoodGroup = svg.append("g")
+    .attr("class", "neighborhood-layer")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -75,6 +95,9 @@ d3.csv("../sample_data.csv").then(data => {
 
     // Draw timeline chart
     drawTimelineChart();
+
+    // Draw initial neighborhood zones
+    drawNeighborhoodZones();
 
     updateVisualization();
 });
@@ -153,6 +176,75 @@ function updateStats(data, semester) {
             <div class="stat-value">${d.value}</div>
             <div class="stat-label">${d.label}</div>
         `);
+}
+
+function drawNeighborhoodZones() {
+    // Calculate center point for each neighborhood using ALL data
+    const neighborhoodCenters = d3.rollup(
+        allData,
+        v => ({
+            lat: d3.mean(v, d => d.latitude),
+            lon: d3.mean(v, d => d.longitude),
+            count: v.length,
+            name: v[0].neighborhood
+        }),
+        d => d.neighborhood
+    );
+
+    const xExtent = d3.extent(allData, d => d.longitude);
+    const yExtent = d3.extent(allData, d => d.latitude);
+
+    const xScale = d3.scaleLinear()
+        .domain(xExtent)
+        .range([0, width - margin.left - margin.right]);
+
+    const yScale = d3.scaleLinear()
+        .domain(yExtent)
+        .range([height - margin.top - margin.bottom, 0]);
+
+    // Convert centers to array for Voronoi
+    const centers = Array.from(neighborhoodCenters.values()).map(d => ({
+        x: xScale(d.lon),
+        y: yScale(d.lat),
+        name: d.name,
+        count: d.count
+    }));
+
+    // Create Voronoi diagram
+    const delaunay = d3.Delaunay.from(centers, d => d.x, d => d.y);
+    const voronoi = delaunay.voronoi([0, 0, width - margin.left - margin.right, height - margin.top - margin.bottom]);
+
+    // Draw neighborhood zones
+    centers.forEach((d, i) => {
+        neighborhoodGroup.append("path")
+            .attr("class", "neighborhood-zone")
+            .attr("d", voronoi.renderCell(i))
+            .style("fill", neighborhoodColors[d.name] || '#f5f5f5')
+            .style("stroke", "#999")
+            .style("stroke-width", "1.5px")
+            .style("opacity", 0.4);
+    });
+
+    // Add neighborhood labels
+    centers.forEach(d => {
+        neighborhoodGroup.append("text")
+            .attr("class", "neighborhood-label")
+            .attr("x", d.x)
+            .attr("y", d.y)
+            .text(() => {
+                // Abbreviate long neighborhood names
+                if (d.name.includes('Fenway')) return 'Fenway';
+                if (d.name.includes('South Boston')) return 'S. Boston';
+                if (d.name.includes('Downtown')) return 'Downtown';
+                return d.name;
+            })
+            .style("font-size", "11px")
+            .style("font-weight", "600")
+            .style("fill", "#333")
+            .style("text-anchor", "middle")
+            .style("pointer-events", "none")
+            .style("text-shadow", "1px 1px 2px white, -1px -1px 2px white");
+    });
 }
 
 function renderMap(data, semester) {
