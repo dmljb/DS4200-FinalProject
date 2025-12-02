@@ -4,7 +4,7 @@ const margin = {top: 20, right: 20, bottom: 20, left: 20};
 
 // Month names
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                   'July', 'August', 'September', 'October', 'November', 'December'];
+    'July', 'August', 'September', 'October', 'November', 'December'];
 
 // Color scales
 const semesterColors = {
@@ -56,33 +56,33 @@ d3.csv("../sample_data.csv").then(data => {
         month: +d.month,
         year: +d.year
     }));
-    
+
     // Group data by month
     for (let m = 1; m <= 12; m++) {
         monthlyData.push(allData.filter(d => d.month === m));
     }
-    
+
     // Setup slider
     d3.select("#time-slider")
         .on("input", function() {
             currentMonth = +this.value;
             updateVisualization();
         });
-    
+
     // play button
     d3.select("#play-btn").on("click", togglePlay);
     d3.select("#reset-btn").on("click", reset);
-    
+
     // Draw timeline chart
     drawTimelineChart();
-    
+
     updateVisualization();
 });
 
 function togglePlay() {
     isPlaying = !isPlaying;
     const btn = d3.select("#play-btn");
-    
+
     if (isPlaying) {
         btn.text("⏸️ Pause");
         playInterval = setInterval(() => {
@@ -106,12 +106,12 @@ function reset() {
 function updateVisualization() {
     const filteredData = monthlyData[currentMonth];
     const monthName = monthNames[currentMonth];
-    
+
     // Update period label
     const semester = getSemester(currentMonth + 1);
     d3.select("#current-period")
         .text(`${monthName} - ${semester} Semester`);
-    
+
     updateStats(filteredData, semester);
     renderMap(filteredData, semester);
     updateTimelineChart(currentMonth);
@@ -128,26 +128,26 @@ function updateStats(data, semester) {
     const topCategory = d3.rollup(data, v => v.length, d => d.category);
     const topCat = Array.from(topCategory.entries())
         .sort((a, b) => b[1] - a[1])[0];
-    const avgResponseTime = d3.mean(data.filter(d => d.response_time_hours > 0), 
+    const avgResponseTime = d3.mean(data.filter(d => d.response_time_hours > 0),
         d => d.response_time_hours);
     const neighborhoods = new Set(data.map(d => d.neighborhood)).size;
-    
+
     const statsData = [
         { label: 'Complaints', value: totalComplaints },
         { label: 'Top Category', value: topCat ? topCat[0] : 'N/A' },
-        { label: 'Avg Response', value: avgResponseTime ? 
-            `${avgResponseTime.toFixed(1)}h` : 'N/A' },
+        { label: 'Avg Response', value: avgResponseTime ?
+                `${avgResponseTime.toFixed(1)}h` : 'N/A' },
         { label: 'Neighborhoods', value: neighborhoods }
     ];
-    
+
     const stats = d3.select("#stats")
         .selectAll(".stat-card")
         .data(statsData);
-    
+
     const statsEnter = stats.enter()
         .append("div")
         .attr("class", "stat-card");
-    
+
     statsEnter.merge(stats)
         .html(d => `
             <div class="stat-value">${d.value}</div>
@@ -159,22 +159,22 @@ function renderMap(data, semester) {
     // Create scales
     const xExtent = d3.extent(allData, d => d.longitude);
     const yExtent = d3.extent(allData, d => d.latitude);
-    
+
     const xScale = d3.scaleLinear()
         .domain(xExtent)
         .range([0, width - margin.left - margin.right]);
-    
+
     const yScale = d3.scaleLinear()
         .domain(yExtent)
         .range([height - margin.top - margin.bottom, 0]);
-    
+
     const sizeScale = d3.scaleSqrt()
         .domain([0, d3.max(data, d => d.distance_from_neu_km) || 1])
         .range([8, 4]);
-    
+
     const circles = g.selectAll(".circle")
         .data(data, d => d.case_id);
-    
+
     // Exit
     circles.exit()
         .transition()
@@ -182,7 +182,7 @@ function renderMap(data, semester) {
         .attr("r", 0)
         .style("opacity", 0)
         .remove();
-    
+
     // Enter + Update
     const circlesEnter = circles.enter()
         .append("circle")
@@ -195,7 +195,7 @@ function renderMap(data, semester) {
         .on("mouseover", showTooltip)
         .on("mousemove", moveTooltip)
         .on("mouseout", hideTooltip);
-    
+
     circlesEnter.merge(circles)
         .transition()
         .duration(500)
@@ -210,32 +210,32 @@ function drawTimelineChart() {
     const chartWidth = 1340;
     const chartHeight = 200;
     const chartMargin = {top: 20, right: 30, bottom: 40, left: 50};
-    
+
     chartSvg
         .attr("width", chartWidth)
         .attr("height", chartHeight);
-    
+
     const chartG = chartSvg.append("g")
         .attr("transform", `translate(${chartMargin.left},${chartMargin.top})`);
-    
+
     // Calculate monthly counts
     const monthlyCounts = monthlyData.map((data, i) => ({
         month: i,
         count: data.length,
         name: monthNames[i]
     }));
-    
+
     // Scales
     const x = d3.scaleBand()
         .domain(monthlyCounts.map(d => d.month))
         .range([0, chartWidth - chartMargin.left - chartMargin.right])
         .padding(0.1);
-    
+
     const y = d3.scaleLinear()
         .domain([0, d3.max(monthlyCounts, d => d.count)])
         .nice()
         .range([chartHeight - chartMargin.top - chartMargin.bottom, 0]);
-    
+
     // Bars
     chartG.selectAll(".bar")
         .data(monthlyCounts)
@@ -251,13 +251,13 @@ function drawTimelineChart() {
             d3.select("#time-slider").property("value", currentMonth);
             updateVisualization();
         });
-    
+
     // Axes
     chartG.append("g")
         .attr("class", "axis")
         .attr("transform", `translate(0,${chartHeight - chartMargin.top - chartMargin.bottom})`)
         .call(d3.axisBottom(x).tickFormat(i => monthNames[i].substring(0, 3)));
-    
+
     chartG.append("g")
         .attr("class", "axis")
         .call(d3.axisLeft(y));
@@ -269,9 +269,9 @@ function updateTimelineChart(activeMonth) {
 }
 
 function showTooltip(event, d) {
-    const responseTime = d.response_time_hours > 0 ? 
+    const responseTime = d.response_time_hours > 0 ?
         `${d.response_time_hours.toFixed(1)} hours` : 'Open';
-    
+
     tooltip
         .html(`
             <div class="tooltip-title">${d.category}</div>
