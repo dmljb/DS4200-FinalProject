@@ -32,7 +32,7 @@ const g = svg.append("g")
 
 const tooltip = d3.select("#tooltip");
 
-d3.csv("../sample_data.csv").then(data => {
+d3.csv("./sample_data.csv").then(data => {
     // Process data
     allData = data.map(d => ({
         ...d,
