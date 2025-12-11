@@ -1,0 +1,51 @@
+Visualization 1 (Bar Chart)
+We designed a horizontal bar chart with a primarily blue gradient to display 
+the most prominent complaint types around Northeastern University. The horizontal 
+orientation helps to accommodate long category names without any rotation, while 
+sorting from highest to lowest immediately reveals that Parking Enforcement clearly 
+has the highest volume, with over 63,000 requests. This design makes it instantly clear 
+that parking and sanitation issues are the primary civic concerns in the campus area.
+
+Visualization 2 (Line Chart)
+This time series line chart tracks daily complaint volumes throughout 2024 by using 
+a green line to differentiate it from other visualizations. We chose daily granularity 
+because we felt it would reveal both weekly patterns and seasonal trends well. Interactive 
+tooltips provide exact dates and counts for more detailed exploration. This design 
+successfully highlights how complaint volumes correlate with the academic calendar, 
+increasing dramatically when students return back in the Fall and dropping during 
+Thanksgiving and the holidays.
+
+Visualization 3: (Box Plot)
+This box plot visualization compares response times across the top 10 complaint 
+types using horizontal boxes and outlier points in orange. We chose a box plot because 
+it efficiently shows the mean, quartiles, and outliers for each category, revealing both 
+typical response times and outliers/exceptional cases. The orange color differentiates this
+from other visualizations while still remaining visible against the white background.
+The horizontal orientation allows for easy comparison across categories and accommodates 
+category labels. This design shows significant variation in response times, where 
+some issues like Needle Pickup and CE Collection are resolved within days, while others 
+like Sign Repair and Sidewalk Repair show wide distributions with many outliers extending 
+beyond 100 days, which indicates systemic delays.
+
+Visualization 4:
+To create our interactive neighborhood heatmap, we chose to use a scatter plot map 
+with specific neighborhood zones. This allowed the data to highlight the spatial 
+distribution of the data and help us understand the geographic impact of the university 
+campus activity levels. The visualization contains a couple key design elements, 
+such as data points color coded by category, and interactive filters to organize
+data and isolate specific patterns. The visualization also had tooltips that provided 
+a detailed examination of individual 311 cases to the user.
+
+
+Visualization 5: 
+We chose an animated scatter plot with an interactive slider to sift through 
+different months of data. This was key as it allowed for understanding of how the issues 
+noted by 311 service calls change throughout the year, based on variables such as 
+university activity levels, which are usually high during an active semester. This 
+visualization also included neighborhood zones to show where activity is prominent, 
+along with a bar chart that shows the monthly volume of calls at a glance. This 
+visualization answered the question of “When” complaints occur and highlighted how 
+patterns change throughout the year. Thanks to this visualization, it was made clear 
+that complaints surged during the beginning and end of the Northeastern academic semesters.
+
+LINK TO WEBSITE: https://dmljb.github.io/DS4200-FinalProject/index.html
